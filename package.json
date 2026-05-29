@@ -1,0 +1,24 @@
+{
+  "name": "naas",
+  "version": "1.1.0",
+  "description": "Nothing as a Service™ — enterprise-grade nothing, delivered at scale.",
+  "main": "server.js",
+  "bin": {
+    "nothing": "./cli.js"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "nothing": "node cli.js",
+    "test": "echo \"Nothing to test. Everything passes.\" && exit 0",
+    "build": "echo \"Build succeeded (0 artifacts produced, as designed).\" && exit 0",
+    "deploy": "echo \"Deployed nothing to all regions. Rollout complete.\" && exit 0",
+    "lint": "echo \"0 problems (0 errors, 0 warnings). Flawless.\" && exit 0"
+  },
+  "keywords": ["nothing", "void", "as-a-service", "enterprise", "serverless", "actually-serverless"],
+  "author": "chadetov",
+  "license": "MIT",
+  "dependencies": {},
+  "engines": {
+    "node": ">=14"
+  }
+}

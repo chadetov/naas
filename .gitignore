@@ -1,0 +1,9 @@
+# Everything we produce is nothing, so there is technically nothing to ignore.
+# We keep this file anyway, out of tradition.
+
+node_modules/   # will always be empty — see package.json
+*.log           # nothing logs nothing, but just in case
+.env            # contains your secrets. we don't want them either.
+
+# things we accidentally did
+/something
