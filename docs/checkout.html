@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Checkout — NaaS Pro</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='40' fill='black'/></svg>">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #07070f; --fg: #e8e8ef; --muted: #9aa0b4;
+      --accent: #8ab4ff; --card: #ffffff0a; --border: #ffffff1f; --ok: #28c840;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: radial-gradient(120% 80% at 50% -10%, #16162e, var(--bg));
+      color: var(--fg); min-height: 100vh; display: grid; place-items: center;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      padding: 2rem 1.25rem; line-height: 1.55;
+    }
+    .card {
+      width: 100%; max-width: 420px; background: var(--card);
+      border: 1px solid var(--border); border-radius: 16px; padding: 1.75rem;
+      box-shadow: 0 30px 80px -30px #000;
+    }
+    .top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.25rem; }
+    .top h1 { font-size: 1.15rem; letter-spacing: -0.02em; }
+    .top .lock { color: var(--muted); font-size: 0.72rem; }
+    .summary {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0.9rem 0; margin: 0.75rem 0 1.25rem; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    }
+    .summary .label { color: var(--muted); font-size: 0.85rem; }
+    .summary .label b { color: var(--fg); display: block; font-size: 1rem; }
+    .summary .amt { font-size: 1.6rem; font-weight: 700; }
+    .summary .amt small { font-size: 0.8rem; color: var(--muted); font-weight: 400; }
+
+    label { display: block; font-size: 0.75rem; color: var(--muted); margin: 0.9rem 0 0.3rem; }
+    input {
+      width: 100%; padding: 0.7rem 0.8rem; border-radius: 9px;
+      border: 1px solid var(--border); background: #00000055; color: var(--fg);
+      font-family: inherit; font-size: 0.9rem;
+    }
+    input:focus { outline: none; border-color: var(--accent); }
+    .row { display: flex; gap: 0.6rem; }
+    .row > div { flex: 1; }
+
+    .pay {
+      width: 100%; margin-top: 1.4rem; padding: 0.85rem; border: none; border-radius: 10px;
+      background: var(--accent); color: #07070f; font-family: inherit; font-weight: 700;
+      font-size: 0.95rem; cursor: pointer; transition: transform .12s ease, opacity .2s ease;
+    }
+    .pay:hover { transform: translateY(-1px); }
+    .pay:disabled { cursor: default; opacity: 0.7; transform: none; }
+
+    .fine { text-align: center; color: var(--muted); font-size: 0.72rem; margin-top: 1rem; }
+    .fine a { color: var(--accent); text-decoration: none; }
+
+    /* progress / success states */
+    .status { margin-top: 1.25rem; font-size: 0.85rem; white-space: pre-wrap; min-height: 1.2em; }
+    .status .line { opacity: 0; animation: rise .4s ease forwards; }
+    .status .ok { color: var(--ok); }
+    @keyframes rise { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+    .spinner {
+      display: inline-block; width: 12px; height: 12px; border-radius: 50%;
+      border: 2px solid var(--border); border-top-color: var(--accent);
+      animation: spin .7s linear infinite; vertical-align: middle; margin-right: 0.4rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .void {
+      width: 96px; height: 96px; border-radius: 50%; margin: 0.5rem auto 1rem; background: #000;
+      box-shadow: 0 0 50px 12px rgba(120,120,255,0.25), inset 0 0 40px #000;
+      animation: breathe 5s ease-in-out infinite;
+    }
+    @keyframes breathe { 0%,100% { transform: scale(1); } 50% { transform: scale(1.06); } }
+    .hidden { display: none; }
+    .center { text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <!-- Checkout form -->
+    <div id="form">
+      <div class="top">
+        <h1>NaaS Pro</h1>
+        <span class="lock">🔒 secured by Sheer Force of Will</span>
+      </div>
+
+      <div class="summary">
+        <div class="label">Subscribing to<b>Pro — nothing, but faster</b></div>
+        <div class="amt">$99<small>/mo</small></div>
+      </div>
+
+      <label for="email">Email</label>
+      <input id="email" type="email" placeholder="you@example.com" autocomplete="email">
+
+      <label for="card">Card number</label>
+      <input id="card" inputmode="numeric" placeholder="4242 4242 4242 4242" autocomplete="cc-number">
+
+      <div class="row">
+        <div>
+          <label for="exp">Expiry</label>
+          <input id="exp" placeholder="MM / YY" autocomplete="cc-exp">
+        </div>
+        <div>
+          <label for="cvc">CVC</label>
+          <input id="cvc" inputmode="numeric" placeholder="•••" autocomplete="cc-csc">
+        </div>
+      </div>
+
+      <button class="pay" id="payBtn" onclick="pay()">Pay $99.00</button>
+      <p class="fine">No real payment is processed. You will receive nothing.<br><a href="index.html">← back to safety</a></p>
+    </div>
+
+    <!-- Success state -->
+    <div id="done" class="hidden center">
+      <div class="void"></div>
+      <h1 style="font-size:1.2rem;">You're Pro now.</h1>
+      <p style="color:var(--muted); font-size:0.85rem; margin-top:0.5rem;">Your nothing has been upgraded. It is now exactly as much nothing as before, but you feel better about it.</p>
+      <div class="status" id="receipt"></div>
+      <button class="pay" onclick="location.href='index.html'">Return to the void</button>
+      <p class="fine">A receipt for $0.00 has not been emailed to anyone.</p>
+    </div>
+  </div>
+
+  <script>
+    var steps = [
+      "<span class='spinner'></span>Contacting payment processor…",
+      "Validating card… looks plausible.",
+      "Charging $99.00… charging $0.00… reconciling difference.",
+      "<span class='ok'>✓ Payment of $0.00 declined-approved.</span>",
+      "Provisioning nothing to us-void-1…",
+      "<span class='ok'>✓ Nothing provisioned. 0 bytes delivered.</span>",
+    ];
+
+    function pay() {
+      var btn = document.getElementById('payBtn');
+      btn.disabled = true;
+      btn.textContent = "Processing…";
+
+      // Replace the form body with a live progress log.
+      var form = document.getElementById('form');
+      var log = document.createElement('div');
+      log.className = 'status';
+      form.appendChild(log);
+
+      var i = 0;
+      (function next() {
+        if (i >= steps.length) {
+          setTimeout(finish, 600);
+          return;
+        }
+        var line = document.createElement('div');
+        line.className = 'line';
+        line.innerHTML = steps[i];
+        log.appendChild(line);
+        i++;
+        setTimeout(next, 750);
+      })();
+    }
+
+    function finish() {
+      document.getElementById('form').classList.add('hidden');
+      var done = document.getElementById('done');
+      done.classList.remove('hidden');
+
+      var receipt = document.getElementById('receipt');
+      // Vary the confirmation id without Math.random (it's the principle of the thing).
+      var id = (Date.now() % 1000000).toString(36).toUpperCase();
+      receipt.innerHTML =
+        "<div class='line'>Plan: <b>Pro</b></div>" +
+        "<div class='line'>Charged: <b>$0.00</b></div>" +
+        "<div class='line'>Delivered: <b>nothing</b></div>" +
+        "<div class='line ok'>Confirmation: NOTHING-" + id + "</div>";
+    }
+  </script>
+</body>
+</html>
